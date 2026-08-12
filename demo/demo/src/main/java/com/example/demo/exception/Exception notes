@@ -1,0 +1,153 @@
+Global Exception Handling
+Purpose
+Handles exceptions centrally for the entire application.
+Avoids writing try-catch blocks in every controller.
+Returns meaningful HTTP responses instead of generic 500 Internal Server Error.
+Components
+1. Custom Exception
+
+Example:
+
+public class UserNotFoundException extends RuntimeException {
+
+    public UserNotFoundException(String message){
+        super(message);
+    }
+}
+Purpose
+
+Represents a specific business error.
+
+Instead of
+
+throw new RuntimeException("...");
+
+use
+
+throw new UserNotFoundException("...");
+
+This makes the code more meaningful and readable.
+
+2. super(message)
+Purpose
+
+Calls the constructor of RuntimeException and stores the error message.
+
+Example
+
+super("User not found");
+
+Later,
+
+ex.getMessage();
+
+returns
+
+User not found
+3. @ControllerAdvice
+Purpose
+
+Marks the class as a Global Exception Handler.
+
+Whenever an exception is thrown from any controller, Spring checks this class for a matching @ExceptionHandler.
+
+Without it:
+
+Exception
+   ↓
+500 Internal Server Error
+
+With it:
+
+Exception
+   ↓
+@ControllerAdvice
+   ↓
+Proper Response
+4. @ExceptionHandler
+
+Example
+
+@ExceptionHandler(UserNotFoundException.class)
+Purpose
+
+Tells Spring:
+
+If UserNotFoundException occurs, call this method.
+
+Flow
+Client
+   ↓
+Controller
+   ↓
+Service
+   ↓
+throw UserNotFoundException
+   ↓
+Spring Framework
+   ↓
+@ControllerAdvice
+   ↓
+@ExceptionHandler(UserNotFoundException.class)
+   ↓
+404 NOT FOUND
+
+Interview Questions
+Q1. What is Global Exception Handling?
+
+Global Exception Handling provides a centralized way to handle exceptions across the entire application instead of using try-catch blocks in every controller.
+
+Q2. Why use @ControllerAdvice?
+
+It marks the class as a global exception handler so Spring can route exceptions from any controller to it.
+
+Q3. What does @ExceptionHandler(UserNotFoundException.class) do?
+
+It tells Spring to invoke this method whenever a UserNotFoundException is thrown.
+
+Q4. Why create a custom exception?
+
+To represent business-specific errors clearly and make exception handling more meaningful.
+
+Q5. Why super(message)?
+
+It stores the error message in the parent RuntimeException, allowing us to retrieve it later using getMessage().
+
+Q6. Does the Service call GlobalExceptionHandler?
+
+No. The Service simply throws the exception. Spring automatically catches it and invokes the matching @ExceptionHandler method.
+
+Q7. Can one GlobalExceptionHandler handle multiple exceptions?
+
+Yes. One @ControllerAdvice class can contain multiple @ExceptionHandler methods, each handling a different exception.
+
+Example:
+
+@ExceptionHandler(UserNotFoundException.class)
+
+@ExceptionHandler(EmailAlreadyExistsException.class)
+
+@ExceptionHandler(MethodArgumentNotValidException.class)
+
+@ExceptionHandler(Exception.class)
+Key Points
+UserNotFoundException → Defines what went wrong.
+@ControllerAdvice → Registers a global exception handler.
+@ExceptionHandler → Maps a specific exception to a handler method.
+ResponseEntity → Returns the appropriate HTTP status and response body.
+⭐ Common Interview Flow
+findById()
+      ↓
+User exists?
+   ↓         ↓
+Yes         No
+ ↓           ↓
+Return User  throw UserNotFoundException
+                 ↓
+          @ControllerAdvice
+                 ↓
+         @ExceptionHandler
+                 ↓
+        ResponseEntity(404)
+                 ↓
+              Client

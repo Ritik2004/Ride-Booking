@@ -1,0 +1,98 @@
+📄 User.java (Entity)
+1. Purpose
+Represents the users table in the database.
+Maps a Java object to a database table using JPA/Hibernate.
+Each object of this class represents one row in the table.
+2. Annotations Used
+@Entity
+
+Purpose
+
+Marks this class as a JPA entity.
+Tells Hibernate to map this class to a database table.
+@Table(name = "users")
+
+Purpose
+
+Specifies the database table name.
+Optional. If omitted, Hibernate uses the class name.
+@Id
+
+Purpose
+
+Marks the Primary Key.
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+Purpose
+
+Database generates the primary key automatically using AUTO_INCREMENT.
+Lombok
+
+@Getter
+
+Generates getters.
+
+@Setter
+
+Generates setters.
+
+@NoArgsConstructor
+
+Generates a no-argument constructor.
+Required by Hibernate (uses reflection to create entity objects).
+
+@AllArgsConstructor
+
+Generates a constructor with all fields.
+3. Interview Questions
+Q1. What is an Entity?
+
+Answer
+
+An Entity is a Java class that represents a database table. Each object of the entity represents one row in the table.
+
+Q2. Why do we use @Entity?
+
+To tell JPA/Hibernate that this class should be mapped to a database table.
+
+Q3. Is @Table mandatory?
+
+No. If not provided, Hibernate uses the class name as the table name.
+
+Q4. Why do we use @Id?
+
+It identifies the primary key of the table.
+
+Q5. Why GenerationType.IDENTITY?
+
+It lets the database generate the primary key automatically using an auto-increment column.
+
+Q6. Why is @NoArgsConstructor required?
+
+Hibernate creates entity objects using reflection, so it requires a no-argument constructor.
+
+Q7. Why use Long instead of long?
+
+Long is an object and can be null. JPA works better with wrapper classes because they can represent an unsaved entity whose ID hasn't been generated yet.
+
+Q8. What is Hibernate?
+
+Hibernate is the most commonly used JPA implementation. It converts Java objects into SQL queries and manages the mapping between objects and database tables.
+
+4. Flow
+Java Object
+      ↓
+@Entity
+      ↓
+Hibernate
+      ↓
+SQL
+      ↓
+Database Table
+5. Common Follow-up
+
+Interviewer: Does @Entity create the table?
+
+Answer:
+
+No. @Entity only defines the mapping. Whether the table is created automatically depends on the Hibernate configuration (spring.jpa.hibernate.ddl-auto=create/update).

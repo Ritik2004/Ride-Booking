@@ -1,0 +1,169 @@
+📄 UserController.java Notes
+Purpose
+Exposes REST APIs.
+Handles HTTP Requests.
+Calls Service Layer.
+Returns Response.
+Annotations
+@RestController
+Marks class as REST Controller.
+Automatically converts Java objects into JSON.
+@RequestMapping("/users")
+Base URL for all APIs.
+@GetMapping
+
+Maps HTTP GET request.
+
+Example
+
+GET /users
+@Autowired
+
+Injects UserService.
+
+Interview Questions
+Q1. Why Controller?
+
+Handles incoming HTTP requests and delegates business logic to the Service layer.
+
+Q2. Why should Controller not contain business logic?
+
+To maintain Separation of Concerns. Business logic belongs in the Service layer.
+
+Q3. Why @RestController instead of @Controller?
+
+@Controller
+
+Returns a View (JSP, Thymeleaf).
+
+@RestController
+
+Returns JSON/XML directly.
+Used for REST APIs.
+Q4. Why @RequestMapping?
+
+Defines the base URL for all APIs in the controller.
+
+Q5. Difference between @RequestMapping and @GetMapping?
+@RequestMapping → Generic mapping (can specify any HTTP method).
+@GetMapping → Specifically maps HTTP GET requests.
+⭐ Interview Tip
+
+If they ask:
+
+Create a REST API
+
+You should immediately think:
+
+Entity
+↓
+Repository
+↓
+Service
+↓
+Controller
+
+
+------------------------------------------------------------------------------------------------------------------------------
+Post controller
+@RequestBody
+
+Interview Question
+
+Q. What is @RequestBody?
+
+Answer:
+
+@RequestBody converts the incoming JSON request into a Java object using Jackson.
+
+Example Request
+
+{
+  "name": "Ritik",
+  "email": "ritik@gmail.com",
+  "age": 25
+}
+
+↓
+
+UserRequestDTO
+
+
+
+-------------------------------------Response Entity----------------------------------------------
+ResponseEntity
+Purpose
+
+ResponseEntity gives complete control over the HTTP response.
+
+It lets us return:
+
+Response Body
+HTTP Status Code
+Headers
+Why not return an object directly?
+public User createUser(...)
+
+Spring automatically returns:
+
+200 OK
+
+You cannot easily customize the status code.
+
+With ResponseEntity
+public ResponseEntity<User> createUser(...)
+
+Now you can return any status code.
+
+Common Examples
+GET
+return ResponseEntity.ok(user);
+
+Status
+
+200 OK
+POST
+return ResponseEntity.status(HttpStatus.CREATED).body(user);
+
+Status
+
+201 CREATED
+DELETE
+return ResponseEntity.noContent().build();
+
+Status
+
+204 NO CONTENT
+NOT FOUND
+return ResponseEntity.notFound().build();
+
+Status
+
+404 NOT FOUND
+Flow
+Controller
+      ↓
+ResponseEntity
+      ↓
+HTTP Status + Body + Headers
+      ↓
+Client
+Interview Questions
+Q1. What is ResponseEntity?
+
+ResponseEntity is a wrapper around the HTTP response that allows us to customize the response body, status code, and headers.
+
+Q2. Why use ResponseEntity?
+
+It allows us to return appropriate HTTP status codes like 201 Created, 404 Not Found, and 204 No Content instead of always returning 200 OK.
+
+Q3. Difference between returning User and ResponseEntity<User>?
+
+Returning User
+
+Only returns the response body.
+Status is usually 200 OK.
+
+Returning ResponseEntity<User>
+
+Returns body + status code + headers.

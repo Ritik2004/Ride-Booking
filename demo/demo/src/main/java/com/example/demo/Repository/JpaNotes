@@ -1,0 +1,118 @@
+📄 UserRepository.java
+1. Purpose
+Repository is the Data Access Layer (DAO).
+It is responsible for interacting with the database.
+We don't write SQL for basic CRUD operations because Spring Data JPA provides them.
+2. Code
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+
+}
+3. Annotations & Classes
+@Repository
+
+Purpose
+
+Marks this interface as the Repository layer.
+Spring detects it as a Bean and manages it in the IoC container.
+Also translates database exceptions into Spring's DataAccessException.
+JpaRepository<User, Long>
+
+Purpose
+
+Provides ready-made CRUD methods.
+No implementation is needed.
+
+User
+
+Entity class.
+
+Long
+
+Type of the Primary Key (id).
+4. Built-in Methods
+save(entity)
+
+findById(id)
+
+findAll()
+
+deleteById(id)
+
+existsById(id)
+
+count()
+
+These are automatically available.
+
+5. Custom Query Methods
+
+Spring Data JPA creates queries automatically from method names.
+
+Example
+
+findByEmail(String email)
+
+findByName(String name)
+
+findByAgeGreaterThan(int age)
+
+existsByEmail(String email)
+
+No SQL required.
+
+6. Flow
+Client
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Repository
+   ↓
+Hibernate (JPA)
+   ↓
+Database
+Interview Questions
+Q1. What is Repository?
+
+Repository is the Data Access Layer responsible for performing database operations.
+
+Q2. Why do we extend JpaRepository?
+
+Because it already provides built-in CRUD operations like save(), findById(), findAll(), and deleteById(), reducing boilerplate code.
+
+Q3. Why is UserRepository an interface and not a class?
+
+Spring Data JPA automatically generates the implementation at runtime using proxies, so we only define the interface.
+
+Q4. What does JpaRepository<User, Long> mean?
+User → Entity class.
+Long → Type of the primary key.
+Q5. Who implements JpaRepository methods?
+
+Spring Data JPA generates the implementation automatically at runtime.
+
+Q6. Do we write SQL for CRUD operations?
+
+No. Spring Data JPA generates the SQL automatically.
+
+Q7. Can we create custom methods without writing SQL?
+
+Yes. Spring Data JPA derives queries from method names, for example:
+
+findByEmail(String email)
+Q8. What is the difference between CrudRepository, PagingAndSortingRepository, and JpaRepository?
+CrudRepository → Basic CRUD operations.
+PagingAndSortingRepository → CRUD + Pagination & Sorting.
+JpaRepository → Everything above + JPA-specific features like flush(), batch operations, etc.
+
+Interview Tip: Most Spring Boot projects use JpaRepository.
+
+Key Points to Remember
+Repository = Database layer.
+Extends JpaRepository.
+Spring creates the implementation automatically.
+No SQL for basic CRUD.
+Supports custom query methods.
+Managed by Spring as a Bean.

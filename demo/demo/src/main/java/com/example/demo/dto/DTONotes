@@ -1,0 +1,114 @@
+Q. Why don't we send Entity directly?
+
+Answer:
+Entity represents the database table, whereas DTO represents the data exchanged between the client and the server.
+ Using DTOs prevents exposing database fields, improves security, and allows independent changes to the API and database.
+
+ Client
+    ↓
+ UserRequestDTO
+    ↓
+ Controller
+    ↓
+ Service
+    ↓
+ Entity
+    ↓
+ Repository
+
+ Notice:
+
+ Client never sends Entity.
+ Client sends DTO.
+ Service converts DTO → Entity.
+
+
+
+
+
+
+ 📄 Validation (DTO)
+ Purpose
+ Validates incoming request data before it reaches the Service layer.
+ Prevents invalid data from being saved in the database.
+ Dependency
+ spring-boot-starter-validation
+ Annotations
+ @Valid
+
+ Purpose
+
+ Triggers validation on the request body.
+
+ Example
+
+ public ResponseEntity<User> createUser(
+         @Valid @RequestBody UserRequestDTO dto)
+ @NotBlank
+ Field cannot be null, empty (""), or contain only spaces.
+ @NotBlank(message = "Name is required")
+ private String name;
+ @NotNull
+ Field cannot be null.
+ @NotNull(message = "Age is required")
+ private Integer age;
+ @Email
+
+ Checks if the email format is valid.
+
+ @Email(message = "Invalid Email")
+ @Min
+
+ Minimum allowed value.
+
+ @Min(value = 18, message = "Age must be greater than 18")
+ Flow
+ Client
+    ↓
+ @RequestBody
+    ↓
+ @Valid
+    ↓
+ Validation
+    ↓
+ Valid?
+   ↓       ↓
+ Yes      No
+  ↓        ↓
+ Service   Global Exception Handler
+ Interview Questions
+ Q1. Why Validation?
+
+ To ensure only valid data enters the application and reaches the business logic.
+
+ Q2. Why validate in DTO instead of Service?
+
+ DTO is the first point where request data enters the application. Invalid requests are rejected early before business logic executes.
+
+ Q3. Difference between @NotNull and @NotBlank?
+
+ @NotNull
+
+ Checks only for null.
+
+ @NotBlank
+
+ Checks for null, empty string, and whitespace.
+ Used for Strings.
+ Q4. What does @Valid do?
+
+ It triggers Bean Validation on the request object before the controller method executes.
+
+ Q5. What happens if validation fails?
+
+ Spring throws a MethodArgumentNotValidException, which is usually handled by a Global Exception Handler to return a 400 Bad Request.
+
+ Common Validation Annotations
+ @NotNull
+ @NotBlank
+ @NotEmpty
+ @Email
+ @Min
+ @Max
+ @Size
+ @Pattern

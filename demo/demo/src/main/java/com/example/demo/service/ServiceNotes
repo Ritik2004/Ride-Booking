@@ -1,0 +1,156 @@
+1. Purpose
+Contains the Business Logic.
+Acts as a bridge between the Controller and Repository.
+If tomorrow business rules change, only the Service layer changes.
+2. Annotation
+@Service
+
+Purpose
+
+Marks this class as the Service layer.
+Spring creates and manages it as a Bean.
+@Autowired
+
+Purpose
+
+Injects the UserRepository object automatically from the IoC Container.
+
+Instead of
+
+UserRepository repository = new UserRepository();
+
+Spring gives us the object.
+
+3. Flow
+Client
+   ↓
+Controller
+   ↓
+Service   ← Business Logic
+   ↓
+Repository
+   ↓
+Database
+Interview Questions
+Q1. Why do we need a Service layer?
+
+To keep business logic separate from the Controller and database logic. This follows the Separation of Concerns principle.
+
+Q2. Can the Controller directly call the Repository?
+
+Technically yes, but it is not recommended. It mixes request handling with business logic, making the code difficult to maintain and test.
+
+Q3. What kind of logic belongs in the Service layer?
+
+Examples:
+
+Validate business rules.
+Check if email already exists.
+Call multiple repositories.
+Send email after registration.
+Apply discounts.
+Perform calculations.
+Q4. What does @Service do?
+
+It marks the class as a Service component and registers it as a Spring Bean.
+
+Q5. What is @Autowired?
+
+@Autowired tells Spring to inject the required dependency automatically from the IoC container.
+
+Q6. What is Dependency Injection?
+
+Dependency Injection is the process where Spring creates the required object and injects it into another class instead of us creating it manually.
+
+Q7. Why is Dependency Injection better than using new?
+
+Without DI:
+
+UserRepository repository = new UserRepository();
+
+Problems:
+
+Tight coupling.
+Hard to test.
+Spring cannot manage the object.
+
+With DI:
+
+@Autowired
+private UserRepository repository;
+
+Benefits:
+
+Loose coupling.
+Easy testing.
+Spring manages the object lifecycle.
+⭐ Common Follow-up
+Constructor Injection vs Field Injection?
+
+Field Injection
+
+@Autowired
+private UserRepository repository;
+
+Easy but not recommended for production.
+
+Constructor Injection
+
+private final UserRepository repository;
+
+public UserService(UserRepository repository) {
+    this.repository = repository;
+}
+
+Preferred because:
+
+Better for testing.
+Supports immutable dependencies (final).
+Makes dependencies explicit.
+
+
+"The Service layer contains business logic and acts as an intermediary between the Controller and Repository.
+ It keeps the Controller focused on handling HTTP requests and the Repository focused on database operations,
+ making the application modular, maintainable, and easier to test."
+
+
+
+
+
+
+
+
+
+
+
+ -------------------------------------------------------------------------------
+ save()
+
+ Interview Question
+
+ Q. We never wrote SQL. How is data getting inserted?
+
+ Answer:
+
+ save() is provided by JpaRepository. Spring Data JPA calls Hibernate, and Hibernate generates the appropriate SQL (INSERT or UPDATE) and executes it.
+
+ Flow
+
+ save()
+    ↓
+ JpaRepository
+    ↓
+ Hibernate
+    ↓
+ SQL INSERT
+    ↓
+ Database
+
+ Interview Questions
+ Q. What does save() return?
+
+ It returns the saved entity. If the database generates an ID, the returned object contains that generated ID.
+
+ Q. How does save() know whether to INSERT or UPDATE?
+
+ If the entity's ID is null, Hibernate performs an INSERT. If the ID already exists, it performs an UPDATE.
