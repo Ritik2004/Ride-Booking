@@ -5,6 +5,8 @@ import com.example.driverservice.entity.DriverEntity;
 import com.example.driverservice.entity.Driverstatus;
 import com.example.driverservice.repository.DriverRepository;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DriverService {
@@ -31,5 +33,9 @@ public class DriverService {
         driverEntity.setStatus(status);
 
         return driverRepository.save(driverEntity);
+    }
+
+    public List<DriverEntity> findByStatus(){
+         return driverRepository.findByStatus(Driverstatus.AVAILABLE);
     }
 }

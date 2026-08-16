@@ -1,4 +1,4 @@
-package com.example.driverservice.entity;
+package com.example.riderservice.demo.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -8,23 +8,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
-@Table(name="drivers")
+@Table(name="rides")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class DriverEntity {
+
+public class RideEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    public void setStatus(Driverstatus status) {
-        this.status = status;
-    }
-    private String name;
-    private String phone;
-    private String licenseNumber;
+    private Long userId;
+    private Long driverId;
+    private String pickup;
+    private String destination;
+    private double fare;
+    private Date createdAt;
     @Enumerated(EnumType.STRING)
-    private Driverstatus status;
+    private Ridestatus status;
 }

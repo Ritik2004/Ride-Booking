@@ -5,6 +5,8 @@ import com.example.driverservice.entity.Driverstatus;
 import com.example.driverservice.service.DriverService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class DriverController {
 
@@ -32,5 +34,8 @@ public class DriverController {
             @RequestBody  Driverstatus status){
         return driverService.updateDriverstatus(id,status);
     }
-
+   @GetMapping("/available")
+    public List<DriverEntity> getDriverstatus(){
+        return driverService.findByStatus();
+   }
 }

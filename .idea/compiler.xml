@@ -9,12 +9,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="demo" />
         <module name="driverservice" />
+        <module name="demo (1) (com.example.riderservice)" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="demo" options="-parameters" />
+      <module name="demo (1) (com.example.riderservice)" options="-parameters" />
       <module name="driverservice" options="-parameters" />
     </option>
   </component>
