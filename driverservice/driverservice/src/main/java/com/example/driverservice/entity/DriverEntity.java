@@ -27,4 +27,25 @@ public class DriverEntity {
     private String licenseNumber;
     @Enumerated(EnumType.STRING)
     private Driverstatus status;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public Driverstatus getStatus() {
+        return status;
+    }
+
 }
