@@ -1,6 +1,7 @@
 package com.example.riderservice.demo.service;
 
 import com.example.riderservice.demo.dto.DriverResponse;
+import com.example.riderservice.demo.dto.PaymentRequest;
 import com.example.riderservice.demo.entity.RideEntity;
 import com.example.riderservice.demo.entity.Ridestatus;
 import com.example.riderservice.demo.repository.RideRepository;
@@ -62,20 +63,38 @@ public class Rideservice {
                  .retrieve()
                  .toBodilessEntity();
          return rideRepository.save(ride);
-
-
     }
+
     public RideEntity startRide(Long rideId) {
         RideEntity ride = rideRepository.findById(rideId)
                 .orElseThrow(() -> new RuntimeException("Ride not found"));
         ride.setStatus(Ridestatus.STARTED);
         return rideRepository.save(ride);
     }
+
+
     public RideEntity completeRide(Long rideId){
         RideEntity ride = rideRepository.findById(rideId)
                 .orElseThrow(()->new RuntimeException("Ride not found"));
         ride.setStatus(Ridestatus.COMPLETED);
-        return rideRepository.save(ride);
+
+        RideEntity savedRide = rideRepository.save(ride);
+
+
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setRideId(ride.getId());
+        paymentRequest.setUserId(ride.getUserId());
+        paymentRequest.setAmount(ride.getFare());
+        paymentRequest.setStatus("PENDING");
+
+        restClient
+                .post()
+                .uri("http://localhost:8083/payments")
+                .body(paymentRequest)
+                .retrieve()
+                .toBodilessEntity();
+
+        return savedRide;
     }
 }
 
